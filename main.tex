@@ -1,0 +1,90 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[10pt,a4paper]{article}
+
+\addtolength{\oddsidemargin}{-.5in}
+\addtolength{\evensidemargin}{-.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1in}
+
+% Graphics
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+% Math
+\usepackage{amssymb}
+\usepackage{amsmath} % Required for some math elements 
+
+% Other
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage[acronym]{glossaries}
+
+
+%----------------------------------------------------------------------------------------
+%	MAIN PART
+%----------------------------------------------------------------------------------------
+\newacronym{daq}{DAQ}{Data Acquisition System}
+
+
+%----------------------------------------------------------------------------------------
+%	MAIN PART
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+\title{Data Acquisition System for Indoor Air Quality Monitoring using Arduino}
+\author{Erick Andrés Obregón Fonseca}
+\date{\today}
+\maketitle
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Abstract
+%----------------------------------------------------------------------------------------
+\begin{abstract}
+\normalsize
+
+
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	Table of Content
+%----------------------------------------------------------------------------------------
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	Main Part
+%----------------------------------------------------------------------------------------
+\input{sections/01-introduction}
+\input{sections/02-methodology}
+\input{sections/03-results_and_discussion}
+\input{sections/04-conclusions}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	Appendix
+%----------------------------------------------------------------------------------------
+\input{sections/appendix}
+
+%----------------------------------------------------------------------------------------
+%	Bibliography
+%----------------------------------------------------------------------------------------
+\clearpage
+\bibliography{bibliography/sample}{}
+\bibliographystyle{plain}
+
+\end{document}
