@@ -1,7 +1,7 @@
 %----------------------------------------------------------------------------------------
 %	PACKAGES AND DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
-
+% !TEX root=main.tex
 \documentclass[10pt,a4paper]{article}
 
 \addtolength{\oddsidemargin}{-.5in}
@@ -18,7 +18,7 @@
 
 % Math
 \usepackage{amssymb}
-\usepackage{amsmath} % Required for some math elements 
+\usepackage{amsmath}
 
 % Other
 \usepackage{algorithmic}
@@ -26,20 +26,43 @@
 \usepackage{lipsum}
 \usepackage{hyperref}
 \usepackage[acronym]{glossaries}
+\usepackage{url}
+
+\setlength{\parindent}{12pt}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+%----------------------------------------------------------------------------------------
+% Acronyms
+%----------------------------------------------------------------------------------------
+\newacronym{adc}{ADC}{Analog-Digital Converter}
+\newacronym{daq}{DAQ}{Data Acquisition}
+\newacronym{dc}{DC}{Direct Current}
+\newacronym{diy}{DIY}{Do It Yourself}
+\newacronym{i2c}{I2C}{Inter-Integrated Circuit}
+\newacronym{iaq}{IAQ}{Indoor Air Quality}
+\newacronym{icsp}{ICSP}{In-Circuit Serial Programming}
+\newacronym{iir}{IIR}{Infinite Impulse Response}
+\newacronym{lfn}{LFN}{Low-Frequency Noise}
+\newacronym{lpg}{LPG}{Liquefied Petroleum Gas}
+\newacronym{pcb}{PCB}{Printed Circuit Board}
+\newacronym{psd}{PSD}{Power Spectral Density}
+\newacronym{pwm}{PWM}{Pulse-Width Modulation}
+\newacronym{spi}{SPI}{Serial Peripheral Interface}
+\newacronym{usb}{USB}{Universal Serial Bus}
+\newacronym{twi}{TWI}{Two Wire Interface}
 
 
 %----------------------------------------------------------------------------------------
-%	MAIN PART
-%----------------------------------------------------------------------------------------
-\newacronym{daq}{DAQ}{Data Acquisition System}
-
-
-%----------------------------------------------------------------------------------------
-%	MAIN PART
+% MAIN PART
 %----------------------------------------------------------------------------------------
 \begin{document}
 
-\title{Data Acquisition System for Indoor Air Quality Monitoring using Arduino}
+\title{Data Acquisition System for Indoor Air Quality Monitoring using Arduino UNO R3 Board}
 \author{Erick Andrés Obregón Fonseca}
 \date{\today}
 \maketitle
@@ -48,16 +71,31 @@
 
 
 %----------------------------------------------------------------------------------------
-%	Abstract
+% Abstract
 %----------------------------------------------------------------------------------------
 \begin{abstract}
 \normalsize
-
-
+In recent years, scientists, politicians, and environmental institutions have
+focused on Indoor Air Quality. Later research has demonstrated that poor air
+quality can lead to different respiratory problems and cardiovascular
+diseases. This project aims to develop a prototype for an Indoor Air Quality
+Monitoring System using an Arduino UNO board. For such a task, variables like
+temperature, humidity, and gas concentrations are measured to detect any
+condition that can cause long-term health issues. First, some basic concepts
+are introduced. Then, the following methodology is described, where the
+development of the system is shown. This includes the choice of sensor, design
+of amplification, and filtering stages for analog sensor, and the proposed
+algorithm for data sampling. Finally, the results and conclusions are
+discussed.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
-%	Table of Content
+% Keywords
+%----------------------------------------------------------------------------------------
+\keywords{Arduino UNO, DAQ system, I2C, IQA, sensors}
+
+%----------------------------------------------------------------------------------------
+% Table of Content
 %----------------------------------------------------------------------------------------
 \setcounter{tocdepth}{2}
 \tableofcontents
@@ -66,7 +104,7 @@
 \clearpage
 
 %----------------------------------------------------------------------------------------
-%	Main Part
+% Main Part
 %----------------------------------------------------------------------------------------
 \input{sections/01-introduction}
 \input{sections/02-methodology}
@@ -76,15 +114,15 @@
 \clearpage
 
 %----------------------------------------------------------------------------------------
-%	Appendix
+% Appendix
 %----------------------------------------------------------------------------------------
 \input{sections/appendix}
 
 %----------------------------------------------------------------------------------------
-%	Bibliography
+% Bibliography
 %----------------------------------------------------------------------------------------
 \clearpage
 \bibliography{bibliography/sample}{}
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 
 \end{document}
