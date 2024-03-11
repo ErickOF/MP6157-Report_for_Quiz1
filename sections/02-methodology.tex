@@ -85,33 +85,128 @@ Gas sensors can be affected by \acrfull{lfn} coming from different sources, incl
 
 Flicker noise can be observed in various electronic devices and systems--including chemoresistive-based sensors--and it decreases as the frequency increases. In the context of gas sensing, resistance fluctuations in the sensing materials can be measured as low-frequency noise, typically up to a few kHz. The intensity and slope of the power spectral density of the flicker noise can enhance gas sensing capabilities. Different measurement setups and noise-processing methods are used for gas detection in resistive gas sensors, depending on the \acrfull{dc} resistance of the sensing materials~\cite{Kwon_2014, kiely_2017}. In well-designed systems, Flicker noise is generally the primary source at lower frequencies, whereas white noise tends to prevail at higher frequencies~\cite{bahreyni_2009}. In Fig~\ref{fig:flicker_noise_vs_frequency}, how a \acrfull{psd} of a system output looks like is shown~\cite{bahreyni_2009}.
 
-\begin{figure}[ht]
-    \centering\includegraphics[width=0.6\linewidth]{flicker_noise_vs_frequency}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{flicker_noise_vs_frequency}
     \caption{A typical \acrshort{psd} for the noise at the output of a system in the presence of both Flicker and white noise sources.}
 ~\label{fig:flicker_noise_vs_frequency}
 \end{figure}
 
-The corner frequency (f$_{c}$) is the frequency at which the Flicker noise and the white noise of a system are equal in magnitude and is a key parameter in characterizing the noise performance of electronic devices~\cite{smulko_2024}. For the MQ-2 gas sensor specifically, it would need to conduct noise measurements and spectral analysis. This involves measuring the output voltage of the sensor over a range of frequencies and plotting the noise spectral density. Since this is out of the project scope, based on~\cite{smulko_2024} findings, a value of 50kHz is assumed for this project. Having said that a high-pass filter will be used to filter the noise of the signal. \\
+The corner frequency (f$_{c}$) is the frequency at which the Flicker noise and the white noise of a system are equal in magnitude and is a key parameter in characterizing the noise performance of electronic devices~\cite{smulko_2024}. For the MQ-2 gas sensor specifically, it would need to conduct noise measurements and spectral analysis. This involves measuring the output voltage of the sensor over a range of frequencies and plotting the noise spectral density. Since this is out of the project scope, based on~\cite{smulko_2024} findings, a value of 10kHz is assumed for this project. Having said that a high-pass filter will be used to filter the noise of the signal. \\
 
 Butterworth filter is characterized by a smooth roll-off and a flat response in the passband, which means that it attenuates frequencies outside the passband without introducing ripples or distortions~\cite{ruofei_2021}. This filter might not be the best choice for Flicker noise because of its maximally flat frequency response and Flicker noise is more prominent at lower frequencies, and a filter with a sharper cutoff might be more beneficial. Chebyshev filter is a type of \acrfull{iir} filter that provides a steeper roll-off in the stopband compared to Butterworth filter~\cite{podder_2014}. However, the passband ripples can cause additional noise. Bessel filter is a type of low-pass filter that exhibits a maximally flat frequency response in the passband, meaning that the magnitude response is nearly constant up to the cutoff frequency. They also have a linear phase response, meaning that all frequency components of the input signal are delayed by the same amount, preserving the waveform shape~\cite{ashu_2021}. In Fig~\ref{fig:butterworth_vs_chebyshev_vs_bessel_filters}, the comparison for the 3 filters is shown~\cite{kikkert_2008}. \\
 
-\begin{figure}[ht]
-    \centering\includegraphics[width=0.8\linewidth]{butterworth_vs_chebyshev_vs_bessel_filters}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{butterworth_vs_chebyshev_vs_bessel_filters}
     \caption{Comparison of Butterworth, Chebyshev, and Bessel filters.}
 ~\label{fig:butterworth_vs_chebyshev_vs_bessel_filters}
 \end{figure}
 
-The filter to implement will be a second-order Bessel high-pass filter with a cut-off frequency of 50kHz. The Second-order filter was chosen to reduce the complexity of the designed system.
+The filter to implement will be a second-order Bessel high-pass filter with a cut-off frequency of 10kHz. The second-order filter was chosen to reduce the complexity of the designed system. \\
 
-\newpage
+The Filter Design Tool of Texas Instruments \cite{fdt}, can help to save time computing the resistors and capacitors values of the filter topology. Now that the requirements and characteristics of the required filter have been defined, the tool can be used. First, the desired filter needs to be selected:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{fdt_filtertype}
+    \caption{Filter Design Tool - Filter type choice.}
+~\label{fig:fdt_filtertype}
+\end{figure}
+
+Then, the parameters for the filter response can be set. The gain is set to 1 since this stage just takes care of filtering while the amplification stage is discussed in the next section (Sec \ref{sec:methodology:dev_methodology:sc}). The frequency is 10kH, as discussed previously.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{fdt_filterresponse}
+    \caption{Filter Design Tool - Filter response settings.}
+~\label{fig:fdt_filterresponse}
+\end{figure}
+
+The next step is topology selection. The two options are the Sallen-Key and the Multiple Feedback topology. Due to its unity gain and non-inverting gain features, the Sallen-Key topology is used, since the amplified signal won't be inverted.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_topology_sallenkey}
+        \caption{Filter Design Tool - Topology - Sallen-Key.}
+        \label{fig:fdt_topology:sallen-key}
+    \end{subfigure}
+    %
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_topology_multiplefeedback}
+        \caption{Filter Design Tool - Topology - Multiple Feedback.}
+        \label{fig:fdt_topology:multiple_feedback}
+    \end{subfigure}
+\end{figure}
+
+The operational amplifier selected for this task is the OPA2186. It is due to~\cite{opax186_datasheet}:
+
+\begin{itemize}
+    \item \textit{\textbf{Low Offset Voltage (1$\mu$V):}} This minimizes the difference in voltage between the two input terminals when the output is at zero, improving the precision.
+
+    \item \textit{\textbf{Zero-Drift Performance:}} It maintains stable performance across varying temperatures, ensuring that the offset voltage remains consistent and improving precision in applications.
+
+    \item \textit{\textbf{Low Input Bias Current (1pA max):}} This is crucial for applications involving high-impedance sources and minimizes the impact on sensitive circuits, ensuring accurate signal processing.
+
+    \item \textit{\textbf{Unity-Gain Stable:}} It remains stable even when configured with a gain of 1 (no external feedback).
+
+    \item \textit{\textbf{Low Quiescent Current (140 $\mu$A per channel):}} This is essential for battery-powered devices, as it conserves energy and extends battery life--which is a requirement for the project.
+\end{itemize}
+
+This configuration generates the circuit of Fig~\ref{fig:fdt_design_circuit} with the magnitude response (Fig~\ref{fig:fdt_design:magnitude}), the phase response (Fig~\ref{fig:fdt_design:phase}), the group delay (Fig~\ref{fig:fdt_design:group_delay}), and the step response (Fig~\ref{fig:fdt_design:step_response}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{fdt_design_circuit}
+    \caption{Filter Design Tool - Filter response settings.}
+~\label{fig:fdt_design_circuit}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.9\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_design_magnitude}
+        \caption{Filter Design Tool - Design - Magnitude response.}
+        \label{fig:fdt_design:magnitude}
+    \end{subfigure}
+    %
+    \begin{subfigure}[t]{0.9\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_design_phase}
+        \caption{Filter Design Tool - Design - Phase response.}
+        \label{fig:fdt_design:phase}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.9\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_design_groupdelay}
+        \caption{Filter Design Tool - Topology - Group delay.}
+        \label{fig:fdt_design:group_delay}
+    \end{subfigure}
+    %
+    \begin{subfigure}[t]{0.9\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{fdt_design_stepresponse.png}
+        \caption{Filter Design Tool - Topology - Step response.}
+        \label{fig:fdt_design:step_response}
+    \end{subfigure}
+    \label{fig:fdt_design}
+\end{figure}
+
 
 \subsubsection{Signal Conditioning}
 ~\label{sec:methodology:dev_methodology:sc}
 \hspace{8pt}
 The diagram of the MQ-2 sensor can be obtained from its datasheet (Fig~\ref{fig:mq2_diagram})~\cite{mq2_datasheet}.
 
-\begin{figure}[ht]
-    \centering\includegraphics[width=0.5\linewidth]{mq2_diagram}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{mq2_diagram}
     \caption{MQ-2 sensor diagram.}
 ~\label{fig:mq2_diagram}
 \end{figure}
@@ -141,13 +236,14 @@ The output voltage V$_{out}$ is obtained from the voltage division of the load r
     \label{eq:voltage_division}
 \end{equation}
 
-\begin{figure}[ht]
-    \centering\includegraphics[width=0.8\linewidth]{mq2_sensitivity_characteristics}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{mq2_sensitivity_characteristics}
     \caption{Typical sensitivity characteristics of the MQ-2 sensor for several gases.}
 ~\label{fig:mq2_sensitivity_characteristics}
 \end{figure}
 
-After calibrating MQ-2 sensor using an Arduino UNO Rev 3 and guide provided by~\cite{grove_2023}, a voltage range value of 0 (for 0ppm) to 1V (10000ppm) is obtained. Load resistor R$_{L}$ was calibrated at 5k$\Omega$. Solving R$_{S}$ from Eq~\ref{eq:voltage_division}:
+After calibrating the MQ-2 sensor using an Arduino UNO Rev 3 and guide provided by~\cite{grove_2023}, a voltage range value of 0 (for 0ppm) to 1V (10000ppm) is obtained. Load resistor R$_{L}$ was calibrated at 5k$\Omega$. Solving R$_{S}$ from Eq~\ref{eq:voltage_division}:
 
 \begin{equation}
     R_{S} = R_{L} \cdot \frac{V_{out} - V_{S}}{V_{out}}
@@ -164,9 +260,32 @@ Substituting V$_{out}$ = 0V and R$_{L}$ = 5k$\Omega$ in Eq~\ref{eq:r_relationshi
 Substituting V$_{out}$ = 1V and R$_{L}$ = 5k$\Omega$ in Eq~\ref{eq:r_relationship}:
 
 \begin{equation}
-    R_{S} ~= \infty \Omega
+    R_{S} ~= 20k\Omega
     \label{eq:rs_at_1v}
 \end{equation}
+
+With this, the output of the system can be modeled as a resistor or a voltage. The most common use of the sensor is a voltage output, so the sensor is modeled in that way. \\
+
+For the signal amplification, a non-inverting amplifier is used. The topology selected is shown in Fig~\ref{fig:non_inverting_op_amp}~\cite{svoboda_2013}. For such a task, the operational amplifier LM358 is chosen due to~\cite{lm358_datasheet}:
+
+\begin{itemize}
+    \item It is a low-power dual operational amplifier with a wide range of power supply voltages (3 to 36V) and good stability--which accomplishes the lower-power consumption requirement for this system.
+
+    \item Due to its low power consumption, it can operate with a battery or the Arduino UNO supply.
+
+    \item It features high-gain frequency, which is internally compensated.
+
+    \item It simplifies the design due to its unity-gain stability, lower-offset voltage (maximum of 3mV), and lower quiescent current of 300$\mu$A.
+\end{itemize}
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth]{non_inverting_op_amp}
+    \caption{Non-inverting amplifier.}
+~\label{fig:non_inverting_op_amp}
+\end{figure}
 
 
 \subsubsection{Integration of the System}
@@ -174,9 +293,9 @@ Substituting V$_{out}$ = 1V and R$_{L}$ = 5k$\Omega$ in Eq~\ref{eq:r_relationshi
 \hspace{8pt}
 
 
-
-\begin{figure}[ht]
-    \centering\includegraphics[width=1\linewidth]{integration_of_the_system}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{integration_of_the_system}
     \caption{Diagram showing the whole system connected.}
 ~\label{fig:integration_of_the_system}
 \end{figure}

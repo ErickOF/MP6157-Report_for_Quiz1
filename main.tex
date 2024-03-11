@@ -27,6 +27,35 @@
 \usepackage{hyperref}
 \usepackage[acronym]{glossaries}
 \usepackage{url}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \setlength{\parindent}{12pt}
 
@@ -75,18 +104,7 @@
 %----------------------------------------------------------------------------------------
 \begin{abstract}
 \normalsize
-In recent years, scientists, politicians, and environmental institutions have
-focused on Indoor Air Quality. Later research has demonstrated that poor air
-quality can lead to different respiratory problems and cardiovascular
-diseases. This project aims to develop a prototype for an Indoor Air Quality
-Monitoring System using an Arduino UNO board. For such a task, variables like
-temperature, humidity, and gas concentrations are measured to detect any
-condition that can cause long-term health issues. First, some basic concepts
-are introduced. Then, the following methodology is described, where the
-development of the system is shown. This includes the choice of sensor, design
-of amplification, and filtering stages for analog sensor, and the proposed
-algorithm for data sampling. Finally, the results and conclusions are
-discussed.
+In recent years, scientists, politicians, and environmental institutions have focused on Indoor Air Quality. Later research has demonstrated that poor air quality can lead to different respiratory problems and cardiovascular diseases. This project aims to develop a prototype for an Indoor Air Quality Monitoring System using an Arduino UNO board. For such a task, variables like temperature, humidity, and gas concentrations are measured to detect any condition that can cause long-term health issues. First, some basic concepts are introduced. Then, the following methodology is described, where the development of the system is shown. This includes the choice of sensor, design of amplification, and filtering stages for analog sensor, and the proposed algorithm for data sampling. Finally, the results and conclusions are discussed regarding the design of the conditioning and filtering stage of the analog sensor.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -112,11 +130,6 @@ discussed.
 \input{sections/04-conclusions}
 
 \clearpage
-
-%----------------------------------------------------------------------------------------
-% Appendix
-%----------------------------------------------------------------------------------------
-\input{sections/appendix}
 
 %----------------------------------------------------------------------------------------
 % Bibliography
