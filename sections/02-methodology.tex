@@ -110,7 +110,7 @@ The Filter Design Tool of Texas Instruments \cite{fdt}, can help to save time co
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{fdt_filtertype}
-    \caption{Filter Design Tool - Filter type choice.}
+    \caption{Filter Design Tool--Filter type choice.}
 ~\label{fig:fdt_filtertype}
 \end{figure}
 
@@ -119,7 +119,7 @@ Then, the parameters for the filter response can be set. The gain is set to 1 si
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{fdt_filterresponse}
-    \caption{Filter Design Tool - Filter response settings.}
+    \caption{Filter Design Tool--Filter response settings.}
 ~\label{fig:fdt_filterresponse}
 \end{figure}
 
@@ -130,14 +130,14 @@ The next step is topology selection. The two options are the Sallen-Key and the 
     \begin{subfigure}[t]{1\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_topology_sallenkey}
-        \caption{Filter Design Tool - Topology - Sallen-Key.}
+        \caption{Filter Design Tool--Topology - Sallen-Key.}
         \label{fig:fdt_topology:sallen-key}
     \end{subfigure}
     %
     \begin{subfigure}[t]{1\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_topology_multiplefeedback}
-        \caption{Filter Design Tool - Topology - Multiple Feedback.}
+        \caption{Filter Design Tool--Topology - Multiple Feedback.}
         \label{fig:fdt_topology:multiple_feedback}
     \end{subfigure}
 \end{figure}
@@ -161,7 +161,7 @@ This configuration generates the circuit of Fig~\ref{fig:fdt_design_circuit} wit
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{fdt_design_circuit}
-    \caption{Filter Design Tool - Filter response settings.}
+    \caption{Filter Design Tool--Filter response settings.}
 ~\label{fig:fdt_design_circuit}
 \end{figure}
 
@@ -170,14 +170,14 @@ This configuration generates the circuit of Fig~\ref{fig:fdt_design_circuit} wit
     \begin{subfigure}[t]{0.9\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_design_magnitude}
-        \caption{Filter Design Tool - Design - Magnitude response.}
+        \caption{Filter Design Tool--Design--Magnitude response.}
         \label{fig:fdt_design:magnitude}
     \end{subfigure}
     %
     \begin{subfigure}[t]{0.9\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_design_phase}
-        \caption{Filter Design Tool - Design - Phase response.}
+        \caption{Filter Design Tool--Design--Phase response.}
         \label{fig:fdt_design:phase}
     \end{subfigure}
     \\
@@ -185,14 +185,14 @@ This configuration generates the circuit of Fig~\ref{fig:fdt_design_circuit} wit
     \begin{subfigure}[t]{0.9\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_design_groupdelay}
-        \caption{Filter Design Tool - Topology - Group delay.}
+        \caption{Filter Design Tool--Topology--Group delay.}
         \label{fig:fdt_design:group_delay}
     \end{subfigure}
     %
     \begin{subfigure}[t]{0.9\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{fdt_design_stepresponse.png}
-        \caption{Filter Design Tool - Topology - Step response.}
+        \caption{Filter Design Tool--Topology--Step response.}
         \label{fig:fdt_design:step_response}
     \end{subfigure}
     \label{fig:fdt_design}
@@ -278,8 +278,6 @@ For the signal amplification, a non-inverting amplifier is used. The topology se
     \item It simplifies the design due to its unity-gain stability, lower-offset voltage (maximum of 3mV), and lower quiescent current of 300$\mu$A.
 \end{itemize}
 
-
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\linewidth]{non_inverting_op_amp}
@@ -287,10 +285,27 @@ For the signal amplification, a non-inverting amplifier is used. The topology se
 ~\label{fig:non_inverting_op_amp}
 \end{figure}
 
+Given the Eq~\ref{eq:non_inverting_op_amp} for the non-inverting operational amplifier gain:
+
+\begin{equation}
+    A = \frac{V_{out}}{V_{in}} = 1 + \frac{R_{f}}{R_{i}}
+~\label{eq:non_inverting_op_amp}
+\end{equation}
+
+The gain of the conditioning circuit must be A = 5V/V, such as:
+
+\begin{equation}
+    R_{f} = 4 R_{i}
+\end{equation}
+
+To ensure low current and real values of the resistance, R$_{f}$ = 39k$\Omega$ and R$_{i}$ = 10k$\Omega$, given a gain A = 4.9V/V.
+
+
 
 \subsubsection{Integration of the System}
 ~\label{sec:methodology:dev_methodology:iots}
 \hspace{8pt}
+The system consist of a MQ-2 gas analog sensor connected to a filtering and an amplification stage. After signal conditioning, the output signal is connecte to the Arduino analog pin A3. For the I2C-based BMP180 humidity sensor, the SCL sensor pin is connected to the A5 pin of the Arduino, and the SDA sensor pin is connected to the A4 Arduino pin. To save some power, the VCC pin of each sensor will be connected a digital Arduino pin, which allow the system to power-off the sensor when it is no required. In Fig~\ref{fig:integration_of_the_system}, the whole system integration can be seen at high-level.
 
 
 \begin{figure}[H]
